@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "812068412314",
+    "project_id": "sapphireorg-3ccaf",
+    "storage_bucket": "sapphireorg-3ccaf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:812068412314:android:e03e0a73aea032acd13823",
+        "android_client_info": {
+          "package_name": "com.example.sapphire_org"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "812068412314-b5b29du8pcrt9r0dq0p37k3e9npuqhvk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbx8SxGhRxS4hw6YUSf_j2UH_etcBJWAE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "812068412314-b5b29du8pcrt9r0dq0p37k3e9npuqhvk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
