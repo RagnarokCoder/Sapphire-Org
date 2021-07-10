@@ -25,12 +25,13 @@ dependencies:
     sdk: flutter
   cloud_firestore:
   google_fonts:
-  table_calendar:
+  table_calendar: ^2.0.0
   yudiz_modal_sheet:
   date_time_picker:
   bottom_bar_with_sheet:
   firebase_auth:
   firebase_core:
+  flutter_slidable:
   provider:
   beauty_textfield:
   day_night_time_picker:
