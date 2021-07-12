@@ -47,6 +47,10 @@ class _ProyectosState extends State<Proyectos> {
         onPressed: () {
           setState(() {
             _addProject(i.toString());
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => CreateProject()));
           });
         },
         child: Icon(Icons.add),
@@ -69,64 +73,6 @@ class _ProyectosState extends State<Proyectos> {
       color: Color.fromARGB(Random().nextInt(255), Random().nextInt(255),
           Random().nextInt(255), Random().nextInt(255)),
       delete: () => setState(() => projects.remove(id)),
-    );
-  }
-}
-
-class _CrearNuevoProyecto extends StatelessWidget {
-  const _CrearNuevoProyecto({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.14,
-      color: Colors.white, //colorPrincipal,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Container(
-            height: MediaQuery.of(context).size.height * 0.1,
-            decoration: BoxDecoration(
-                color: colorPrincipal,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(50),
-                    topRight: Radius.circular(50))),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                TextButton.icon(
-                  icon: Icon(
-                    Icons.create,
-                    color: Colors.blue.shade900,
-                  ),
-                  label: Text(
-                    "Crear Proyecto",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  onPressed: () {},
-                ),
-                TextButton.icon(
-                  icon: Icon(
-                    Icons.done,
-                    color: Colors.green.shade800,
-                  ),
-                  label: Text(
-                    "Cerrar Proyecto",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  onPressed: () {},
-                )
-              ],
-            ),
-          )
-        ],
-      ),
     );
   }
 }

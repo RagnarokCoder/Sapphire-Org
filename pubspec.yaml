@@ -32,6 +32,7 @@ dependencies:
   firebase_auth:
   firebase_core:
   flutter_slidable:
+  percent_indicator: "^2.1.7+2"
   provider:
   beauty_textfield:
   day_night_time_picker:
