@@ -16,10 +16,13 @@ class ProjectDetails extends StatelessWidget {
                 color: colorPrincipal.withOpacity(.93), child: _TeamMembers()),
             Container(
               color: colorPrincipal.withOpacity(.93),
-              child: Text('Tareas:',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: textTheme.headline5.fontSize)),
+              child: Container(
+                margin: EdgeInsets.only(left: 10),
+                child: Text('Tareas:',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: textTheme.headline5.fontSize)),
+              ),
             ),
             Container(
                 color: colorPrincipal.withOpacity(.93),
