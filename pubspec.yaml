@@ -36,7 +36,7 @@ dependencies:
   provider:
   beauty_textfield:
   day_night_time_picker:
-
+  flutter_chips_input: 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

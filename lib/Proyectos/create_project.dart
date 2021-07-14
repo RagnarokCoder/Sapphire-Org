@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sapphire_org/Calendario/Calendario.dart';
+import 'package:flutter_chips_input/flutter_chips_input.dart';
 
 class CreateProject extends StatefulWidget {
   CreateProject({Key key}) : super(key: key);
@@ -140,29 +141,93 @@ class _CreateProjectState extends State<CreateProject> {
   }
 
   Widget _projetLeader() {
+    const mockResults = <AppProfile>[
+      AppProfile('Stock Man', 'stock@man.com',
+          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
+      AppProfile('Paul', 'paul@google.com',
+          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
+      AppProfile('Fred', 'fred@google.com',
+          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
+      AppProfile('Bera', 'bera@flutter.io',
+          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
+      AppProfile('John', 'john@flutter.io',
+          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
+      AppProfile('Thomas', 'thomas@flutter.io',
+          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
+      AppProfile('Norbert', 'norbert@flutter.io',
+          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
+      AppProfile('Marina', 'marina@flutter.io',
+          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
+    ];
     return Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15), color: Colors.white),
-      child: TextField(
-          //autofocus: true,
-
-          cursorColor: colorPrincipal,
-          textCapitalization: TextCapitalization.words,
-          decoration: InputDecoration(
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.horizontal(
-                      left: Radius.circular(15), right: Radius.circular(15))),
-              hintText: 'Lider',
-              hintStyle: TextStyle(color: colorPrincipal.withOpacity(.7)),
-              fillColor: colorPrincipal.withOpacity(.8)),
-          style: TextStyle(color: colorPrincipal),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15), color: Colors.white),
+        child: ChipsInput(
+          chipBuilder: (context, state, profile) {
+            return InputChip(
+              key: ObjectKey(profile),
+              label: Text(profile.name),
+              avatar: CircleAvatar(
+                backgroundImage: NetworkImage(profile.imageUrl),
+              ),
+              onDeleted: () => state.deleteChip(profile),
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            );
+          },
+          suggestionBuilder: (context, state, profile) {
+            return ListTile(
+              key: ObjectKey(profile),
+              leading: CircleAvatar(
+                backgroundImage: NetworkImage(profile.imageUrl),
+              ),
+              title: Text(profile.name),
+              subtitle: Text(profile.email),
+              onTap: () => state.selectSuggestion(profile),
+            );
+          },
+          findSuggestions: (String query) {
+            if (query.length != 0) {
+              var lowercaseQuery = query.toLowerCase();
+              return mockResults.where((profile) {
+                return profile.name
+                        .toLowerCase()
+                        .contains(query.toLowerCase()) ||
+                    profile.email.toLowerCase().contains(query.toLowerCase());
+              }).toList(growable: false)
+                ..sort((a, b) => a.name
+                    .toLowerCase()
+                    .indexOf(lowercaseQuery)
+                    .compareTo(b.name.toLowerCase().indexOf(lowercaseQuery)));
+            } else {
+              return const <AppProfile>[];
+            }
+          },
           onChanged: (data) {
-            _selectLeader();
-          }),
-    );
+            print(data);
+          },
+        ));
   }
+}
 
-  Widget _selectLeader() {
-    return ChoiceChip(label: Text('gola'), selected: false);
+class AppProfile {
+  final String name;
+  final String email;
+  final String imageUrl;
+
+  const AppProfile(this.name, this.email, this.imageUrl);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AppProfile &&
+          runtimeType == other.runtimeType &&
+          name == other.name;
+
+  @override
+  int get hashCode => name.hashCode;
+
+  @override
+  String toString() {
+    return 'Profile{$name}';
   }
 }
