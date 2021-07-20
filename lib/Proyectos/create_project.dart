@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sapphire_org/Calendario/Calendario.dart';
 import 'package:flutter_chips_input/flutter_chips_input.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CreateProject extends StatefulWidget {
   CreateProject({Key key}) : super(key: key);
@@ -12,6 +13,11 @@ class CreateProject extends StatefulWidget {
 class _CreateProjectState extends State<CreateProject> {
   String _fecha = '';
   TextEditingController _inputController = new TextEditingController();
+  List mockResults = [];
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,19 +39,25 @@ class _CreateProjectState extends State<CreateProject> {
                 _widgets(_projectInput()),
                 _titles('Entrega'),
                 _widgets(_crearFecha()),
+                _titles('Integrantes'),
+                _integrantes(),
                 _titles('Tipo Proyecto'),
                 _widgets(_projectType()),
                 _titles('Lider'),
                 _widgets(_projetLeader()),
                 _titles('Descripción'),
                 _titles('Lenguaje(s)'),
-                _titles('Integrantes'),
               ],
             ),
           ),
         ]),
       ),
     );
+  }
+
+  _buildListItem(DocumentSnapshot doc) {
+    mockResults.add(doc.get('Nombre'));
+    return Text(doc.get('Nombre').toString());
   }
 
   Widget _titles(String title) {
@@ -141,24 +153,6 @@ class _CreateProjectState extends State<CreateProject> {
   }
 
   Widget _projetLeader() {
-    const mockResults = <AppProfile>[
-      AppProfile('Stock Man', 'stock@man.com',
-          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
-      AppProfile('Paul', 'paul@google.com',
-          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
-      AppProfile('Fred', 'fred@google.com',
-          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
-      AppProfile('Bera', 'bera@flutter.io',
-          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
-      AppProfile('John', 'john@flutter.io',
-          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
-      AppProfile('Thomas', 'thomas@flutter.io',
-          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
-      AppProfile('Norbert', 'norbert@flutter.io',
-          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
-      AppProfile('Marina', 'marina@flutter.io',
-          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
-    ];
     return Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15), color: Colors.white),
@@ -189,17 +183,14 @@ class _CreateProjectState extends State<CreateProject> {
             if (query.length != 0) {
               var lowercaseQuery = query.toLowerCase();
               return mockResults.where((profile) {
-                return profile.name
-                        .toLowerCase()
-                        .contains(query.toLowerCase()) ||
-                    profile.email.toLowerCase().contains(query.toLowerCase());
+                return profile.name.toLowerCase().contains(query.toLowerCase());
               }).toList(growable: false)
                 ..sort((a, b) => a.name
                     .toLowerCase()
                     .indexOf(lowercaseQuery)
                     .compareTo(b.name.toLowerCase().indexOf(lowercaseQuery)));
             } else {
-              return const <AppProfile>[];
+              return const [];
             }
           },
           onChanged: (data) {
@@ -207,27 +198,25 @@ class _CreateProjectState extends State<CreateProject> {
           },
         ));
   }
-}
 
-class AppProfile {
-  final String name;
-  final String email;
-  final String imageUrl;
-
-  const AppProfile(this.name, this.email, this.imageUrl);
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is AppProfile &&
-          runtimeType == other.runtimeType &&
-          name == other.name;
-
-  @override
-  int get hashCode => name.hashCode;
-
-  @override
-  String toString() {
-    return 'Profile{$name}';
+  Widget _integrantes() {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height * 0.2,
+      child: StreamBuilder<QuerySnapshot>(
+        stream:
+            FirebaseFirestore.instance.collection('Integrantes').snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Column(
+                children: snapshot.data.docs
+                    .map<Widget>((doc) => _buildListItem(doc))
+                    .toList());
+          } else {
+            return SizedBox();
+          }
+        },
+      ),
+    );
   }
 }
